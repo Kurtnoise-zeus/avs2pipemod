@@ -97,7 +97,8 @@ void Avs2PipeMod::trim(int* args)
 
 void Avs2PipeMod::info(bool act_info)
 {
-    printf("\navisynth_version %.3f / %s\n", version, versionString);
+    printf("\nA2PM_VERSION %s\n", A2PM_VERSION);
+    printf("avisynth_version %.3f / %s\n", version, versionString);
     printf("script_name      %s\n\n", input);
 
     if (vi.HasVideo()) {
@@ -133,6 +134,7 @@ void Avs2PipeMod::info(bool act_info)
 
 void Avs2PipeMod::benchmark(Params& params)
 {
+    fprintf(stderr,"\nA2PM_VERSION %s\n", A2PM_VERSION);
     constexpr int FRAMES_PER_OUT = 50;
     validate(!vi.HasVideo(), "clip has no video.\n");
     trim(params.trim);
@@ -199,6 +201,8 @@ static void write_audio_file_header(Params& pr, const VideoInfo& vi)
 
 void Avs2PipeMod::outAudio(Params& params)
 {
+    a2pm_log(LOG_INFO, "A2PM_VERSION %s\n", A2PM_VERSION);
+
     validate(!vi.HasAudio(), "clip has no audio.\n");
     trim(params.trim);
 
@@ -257,6 +261,8 @@ void Avs2PipeMod::outAudio(Params& params)
 
 void Avs2PipeMod::prepareY4MOut(Params& params)
 {
+    a2pm_log(LOG_INFO, "A2PM_VERSION %s\n", A2PM_VERSION);
+
     if (vi.IsFieldBased()) {
         a2pm_log(LOG_WARNING,
                  "clip is FieldBased.\n"
@@ -350,6 +356,8 @@ finish:
 
 void Avs2PipeMod::outVideo(Params& params)
 {
+    a2pm_log(LOG_INFO, "A2PM_VERSION %s\n", A2PM_VERSION);
+
     validate(!vi.HasVideo(), "clip has no video.\n");
     trim(params.trim);
 
@@ -449,6 +457,8 @@ int Avs2PipeMod::writePixValuesAsText()
 
 void Avs2PipeMod::dumpPixValues(Params& params)
 {
+    a2pm_log(LOG_INFO, "A2PM_VERSION %s\n", A2PM_VERSION);
+
     validate(!vi.HasVideo(), "clip has no video.\n");
     trim(params.trim);
 
@@ -478,6 +488,8 @@ void Avs2PipeMod::dumpPixValues(Params& params)
 
 void Avs2PipeMod::dumpPluginFiltersList(Params& params)
 {
+    a2pm_log(LOG_INFO, "A2PM_VERSION %s\n", A2PM_VERSION);
+
     printf("\navisynth_version %.3f / %s\n", version, versionString);
     printf("script_name      %s\n\n", input);
 
@@ -532,7 +544,7 @@ Avs2PipeMod* Avs2PipeMod::create(const char* input, const char* dll_path)
         }
         throw e;
     } catch (AvisynthError e) {
-        fprintf(stderr, "avs2pipemod[error]: %s\n", e.msg);
+        fprintf(stderr, "avs2pipemod [error]: %s\n", e.msg);
         AVS_linkage = nullptr;
         env->DeleteScriptEnvironment();
         FreeLibrary(dll);
